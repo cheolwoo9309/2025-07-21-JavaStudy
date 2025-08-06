@@ -3,14 +3,16 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileReader;
+import java.net.URL;
 
 import javax.swing.table.*;
-public class 데이터관리 extends JFrame implements ActionListener{
+public class 데이터관리 extends JFrame implements ActionListener,MouseListener{
 	JTextField tf;
 	JButton btn;
 	JTable table;// 모양
 	DefaultTableModel model;// 데이터 입출력
 	JComboBox box=new JComboBox();
+	JLabel la=new JLabel();
 	// 데이터 읽기
 	String[] mnos=new String[1938];
 	String[] titles=new String[1938];
@@ -87,7 +89,8 @@ public class 데이터관리 extends JFrame implements ActionListener{
 		JScrollPane js=new JScrollPane(table);
 		js.setBounds(10, 60, 760, 500);
 		add(js);
-		
+		la.setBounds(780, 60, 400, 500);
+		add(la);
 		for(int i=0;i<col.length;i++)
 		{
 			column=table.getColumnModel().getColumn(i);
@@ -104,20 +107,27 @@ public class 데이터관리 extends JFrame implements ActionListener{
 		}
 		for(int i=0;i<titles.length;i++)
 		{
-			String[] dates= {
+			String[] datas= {
 					mnos[i],
 					titles[i],
 					actors[i],
 					genres[i],
 					grades[i]
 			};
-			model.addRow(dates);
+			model.addRow(datas);
 		}
-		setSize(800, 600);
+		setSize(1200, 600);
 		setVisible(true);
 		btn.addActionListener(this);
 		tf.addActionListener(this);
+		table.addMouseListener(this);
 	}
+	public static Image getImage(ImageIcon icon,int width,int height)
+	  {
+		   return icon.getImage().getScaledInstance(width, height, 
+				   Image.SCALE_SMOOTH);
+		   // 축소 / 확대 (이미지)
+	  }
 	public static void main(String[] args) {
 		try
 		{
@@ -153,14 +163,14 @@ public class 데이터관리 extends JFrame implements ActionListener{
 				{
 					if(titles[i].contains(fd))
 					{
-						String[] dates= {
+						String[] datas= {
 								mnos[i],
 								titles[i],
 								actors[i],
 								genres[i],
 								grades[i]
 						};
-						model.addRow(dates);
+						model.addRow(datas);
 					}
 				}
 			}
@@ -170,14 +180,14 @@ public class 데이터관리 extends JFrame implements ActionListener{
 				{
 					if(actors[i].contains(fd))
 					{
-						String[] dates= {
+						String[] datas= {
 								mnos[i],
 								titles[i],
 								actors[i],
 								genres[i],
 								grades[i]
 						};
-						model.addRow(dates);
+						model.addRow(datas);
 					}
 				}
 			}
@@ -187,18 +197,54 @@ public class 데이터관리 extends JFrame implements ActionListener{
 				{
 					if(genres[i].contains(fd))
 					{
-						String[] dates= {
+						String[] datas= {
 								mnos[i],
 								titles[i],
 								actors[i],
 								genres[i],
 								grades[i]
 						};
-						model.addRow(dates);
+						model.addRow(datas);
 					}
 				}
 			}
 			
 		}
 	}
+	 @Override
+	  public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		  if(e.getSource()==table)
+			{
+				int row=table.getSelectedRow();
+				String no=model.getValueAt(row, 0).toString();
+				try
+				{
+					URL url=new URL(posters[Integer.parseInt(no)]);
+					Image img=getImage(new ImageIcon(url), 400, 500);
+					la.setIcon(new ImageIcon(img));
+				}catch(Exception ex) {}
+			}
+	 }
+	  @Override
+	  public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	  }
+	  @Override
+	  public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	  }
+	  @Override
+	  public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	  }
+	  @Override
+	  public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	  }
+	
 }
